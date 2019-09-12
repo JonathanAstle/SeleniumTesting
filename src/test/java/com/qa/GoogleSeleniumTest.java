@@ -214,4 +214,40 @@ public class GoogleSeleniumTest {
             }
         }
     }
+
+    @Test
+    public void dropDownTest1() throws InterruptedException {
+        driver.get("https://www.seleniumeasy.com/test/basic-select-dropdown-demo.html");
+        Thread.sleep(800);
+
+        WebElement box = driver.findElement(By.id("select-demo"));
+        WebElement sun = driver.findElement(By.xpath("//*[@id=\"select-demo\"]/option[2]"));
+        WebElement mon = driver.findElement(By.xpath("//*[@id=\"select-demo\"]/option[3]"));
+        WebElement tue = driver.findElement(By.xpath("//*[@id=\"select-demo\"]/option[4]"));
+        WebElement wed = driver.findElement(By.xpath("//*[@id=\"select-demo\"]/option[5]"));
+        WebElement thur = driver.findElement(By.xpath("//*[@id=\"select-demo\"]/option[6]"));
+        WebElement fri = driver.findElement(By.xpath("//*[@id=\"select-demo\"]/option[7]"));
+        WebElement sat = driver.findElement(By.xpath("//*[@id=\"select-demo\"]/option[8]"));
+
+        WebElement text = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[1]/div[2]/p[2]"));
+
+        List<WebElement> list = new ArrayList<WebElement>();
+        list.add(sun);
+        list.add(mon);
+        list.add(tue);
+        list.add(wed);
+        list.add(thur);
+        list.add(fri);
+        list.add(sat);
+
+        for (WebElement day: list) {
+            box.click();
+            Thread.sleep(200);
+
+            day.click();
+
+            assertTrue(text.getText().contains(day.getText()));
+            Thread.sleep(500);
+        }
+    }
 }
