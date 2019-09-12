@@ -9,6 +9,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.JavascriptExecutor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.assertTrue;
 
 public class GoogleSeleniumTest {
@@ -92,5 +95,123 @@ public class GoogleSeleniumTest {
         WebElement displayedTotal = driver.findElement(By.id("displayvalue"));
         assertTrue(displayedTotal.getText().equals("8"));
         Thread.sleep(1000);
+    }
+
+    @Test
+    public void checkboxTest1() throws InterruptedException {
+        driver.get("https://www.seleniumeasy.com/test/basic-checkbox-demo.html");
+        Thread.sleep(800);
+
+        WebElement successCheckbox = driver.findElement(By.id("isAgeSelected"));
+        successCheckbox.click();
+        Thread.sleep(300);
+
+        WebElement successMessage = driver.findElement(By.id("txtAge"));
+        assertTrue(successMessage.getText().equals("Success - Check box is checked"));
+    }
+
+    @Test
+    public void checkboxTest2() throws InterruptedException {
+        driver.get("https://www.seleniumeasy.com/test/basic-checkbox-demo.html");
+        Thread.sleep(800);
+
+        WebElement checkAllButton = driver.findElement(By.id("check1"));
+        WebElement check1 = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[2]/div[2]/div[1]/label/input"));
+        WebElement check2 = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[2]/div[2]/div[2]/label/input"));
+        WebElement check3 = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[2]/div[2]/div[3]/label/input"));
+        WebElement check4 = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[2]/div[2]/div[4]/label/input"));
+        WebElement areChecked = driver.findElement(By.id("isChkd"));
+
+        checkAllButton.click();
+        Thread.sleep(600);
+
+        assertTrue(areChecked.getAttribute("value").equals("true"));
+
+        check1.click();
+        Thread.sleep(100);
+
+        assertTrue(checkAllButton.getAttribute("value").equals("Check All"));
+        Thread.sleep(1000);
+    }
+
+    @Test
+    public void radioButtonTest1() throws InterruptedException {
+        driver.get("https://www.seleniumeasy.com/test/basic-radiobutton-demo.html");
+        Thread.sleep(800);
+
+        WebElement maleButton = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[1]/div[2]/label[1]/input"));
+        WebElement femaleButton = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[1]/div[2]/label[2]/input"));
+        WebElement getCheckedValueButton = driver.findElement(By.id("buttoncheck"));
+        WebElement text = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[1]/div[2]/p[3]"));
+
+        maleButton.click();
+        Thread.sleep(100);
+        getCheckedValueButton.click();
+        Thread.sleep(100);
+
+        assertTrue(text.getText().equals("Radio button 'Male' is checked"));
+
+        femaleButton.click();
+        Thread.sleep(100);
+        getCheckedValueButton.click();
+        Thread.sleep(100);
+
+        assertTrue(text.getText().equals("Radio button 'Female' is checked"));
+        Thread.sleep(600);
+    }
+
+    @Test
+    public void radioButtonTest2() throws InterruptedException {
+        driver.get("https://www.seleniumeasy.com/test/basic-radiobutton-demo.html");
+        Thread.sleep(800);
+
+        WebElement maleButton = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[2]/div[2]/div[1]/label[1]/input"));
+        WebElement femaleButton = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[2]/div[2]/div[1]/label[2]/input"));
+        WebElement age0To5 = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[2]/div[2]/div[2]/label[1]/input"));
+        WebElement age5To15 = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[2]/div[2]/div[2]/label[2]/input"));
+        WebElement age15To50 = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[2]/div[2]/div[2]/label[3]/input"));
+
+        WebElement getValuesButton = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[2]/div[2]/button"));
+        WebElement text = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[2]/div[2]/p[2]"));
+
+        List<WebElement> maleOrFemale = new ArrayList<WebElement>();
+        maleOrFemale.add(maleButton);
+        maleOrFemale.add(femaleButton);
+
+        List<WebElement> ageRanges = new ArrayList<WebElement>();
+        ageRanges.add(age0To5);
+        ageRanges.add(age5To15);
+        ageRanges.add(age15To50);
+
+        for (WebElement gender: maleOrFemale) {
+            for (WebElement ages: ageRanges) {
+                gender.click();
+                ages.click();
+                Thread.sleep(500);
+
+                getValuesButton.click();
+                Thread.sleep(500);
+
+                if (gender.equals(maleButton)) { //if gender is male
+                    assertTrue(text.getText().contains("Sex : Male"));
+                    if (ages.equals(age0To5)) {
+                        assertTrue(text.getText().contains("Age group: 0 - 5"));
+                    } else if (ages.equals(age5To15)) {
+                        assertTrue(text.getText().contains("Age group: 5 - 15"));
+                    } else {
+                        assertTrue(text.getText().contains("Age group: 15 - 50"));
+                    }
+                } else { //gender is female
+                    assertTrue(text.getText().contains("Sex : Female"));
+                    if (ages.equals(age0To5)) {
+                        assertTrue(text.getText().contains("Age group: 0 - 5"));
+                    } else if (ages.equals(age5To15)) {
+                        assertTrue(text.getText().contains("Age group: 5 - 15"));
+                    } else {
+                        assertTrue(text.getText().contains("Age group: 15 - 50"));
+                    }
+                }
+            }
+        }
     }
 }
